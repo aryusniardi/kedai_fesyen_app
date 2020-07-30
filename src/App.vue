@@ -1,60 +1,41 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+    <!-- component header -->
+    <CHeader />
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
+    <!-- component sidebar -->
+    <CSidebar />
 
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
+    <!-- main content -->
     <v-main>
-      <HelloWorld/>
+      <v-slide-y-transition mode="out-in">
+        <router-view></router-view>
+      </v-slide-y-transition>
     </v-main>
+
+    <!-- component footer -->
+    <CFooter />
   </v-app>
 </template>
 
-<style>
-  @import './assets/styles/style.scss';
+<style lang="sass">
+  $color-pack: false
+
+  @import './assets/styles/style.scss'
 </style>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import CHeader from './components/CHeader'
+import CFooter from './components/CFooter'
+import CSidebar from './components/CSidebar'
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+    CHeader,
+    CFooter,
+    CSidebar,
   },
 
   data: () => ({
