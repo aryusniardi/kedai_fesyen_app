@@ -15,6 +15,14 @@
 
     <!-- component footer -->
     <CFooter />
+
+    <CAlert />
+
+    <keep-alive>
+      <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialogbottom-transition">
+        <component :is="currentComponent"></component>
+      </v-dialog>
+    </keep-alive>
   </v-app>
 </template>
 
@@ -28,6 +36,12 @@
 import CHeader from './components/CHeader'
 import CFooter from './components/CFooter'
 import CSidebar from './components/CSidebar'
+import CAlert from './components/CAlert'
+import Search from './views/Search'
+import Login from './views/auth/Login'
+import Register from './views/auth/Register'
+
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'App',
@@ -36,10 +50,29 @@ export default {
     CHeader,
     CFooter,
     CSidebar,
+    CAlert,
+    Search,
+    Login,
+    Register
   },
-
-  data: () => ({
-    //
-  }),
+  methods: {
+    ...mapActions({
+      setStatusDialog: 'dialog/setStatus'
+    })
+  },
+  computed: {
+    ...mapGetters({
+      statusDialog: 'dialog/status',
+      currentComponent: 'dialog/component'
+    }),
+    dialog: {
+      get() {
+        return this.statusDialog
+      },
+      set(value) {
+        this.setStatusDialog(value)
+      }
+    }
+  }
 };
 </script>

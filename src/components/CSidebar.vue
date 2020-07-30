@@ -18,14 +18,14 @@
     <v-list>
       <!-- Register Button -->
       <v-list-item>
-        <v-btn depressed block rounded color="secondary">
+        <v-btn depressed block rounded color="secondary" @click="register()">
           Register <v-icon right light>person_add</v-icon>
         </v-btn>
       </v-list-item>
       
       <!-- Login Button -->
       <v-list-item>
-        <v-btn depressed block rounded color="secondary">
+        <v-btn depressed block rounded color="secondary" @click="login()">
           Login <v-icon right light>lock_open</v-icon>
         </v-btn>
       </v-list-item>
@@ -67,6 +67,8 @@ import { mapGetters, mapActions } from 'vuex'
     computed: {
       ...mapGetters({
         sidebar: 'sidebar',
+        user: 'auth/user',
+        guest: 'auth/guest'
       }),
       drawer: {
         get() {
@@ -79,8 +81,28 @@ import { mapGetters, mapActions } from 'vuex'
     },
     methods: {
       ...mapActions({
-        setSidebar: 'setSidebar'
-      })
+        setSidebar: 'setSidebar',
+        setAlert: 'alert/set',
+        setStatusDialog: 'dialog/setStatus',
+        setComponent: 'dialog/setComponent',
+      }),
+      login() {
+        this.setStatusDialog(true)
+        this.setComponent('login')
+        this.setSidebar(false)
+      },
+      register() {
+        this.setStatusDialog(true)
+        this.setComponent('register')
+        this.setSidebar(false)
+      },
+      test() {
+        this.setAlert({
+          status: true,
+          text: ':)',
+          type: 'success'
+        })
+      }
     }
   }
 </script>

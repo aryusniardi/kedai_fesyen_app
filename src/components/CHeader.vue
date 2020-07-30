@@ -35,6 +35,7 @@
 
     <v-text-field
       v-if="isHome" 
+      @click="search()"
       slot="extension" 
       hide-details
       append-icon="mic" 
@@ -60,7 +61,14 @@ export default {
   methods: {
     ...mapActions({
       setSidebar: 'setSidebar',
-    })
+      setStatusDialog: 'dialog/setStatus',
+      setComponent: 'dialog/setComponent'
+    }),
+    search() {
+      this.setStatusDialog(true)
+      this.setComponent('search')
+      this.setSidebar(false)
+    }
   },
   computed: {
     ...mapGetters({
