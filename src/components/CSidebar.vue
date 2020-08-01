@@ -3,30 +3,31 @@
     light 
     v-model="drawer" 
     absolute 
-    temporary 
-    fixed 
     clipped 
-    class="bg-light">
-    <v-toolbar light>
+    dense>
+    <v-toolbar dark>
       <!-- Closed Navigation Button -->
-      <v-btn icon light @click="drawer=false">
+      <v-btn icon dark @click="drawer=false">
         <v-icon>close</v-icon>
       </v-btn>
-      <v-toolbar-title>Kedai Fesyen</v-toolbar-title>
     </v-toolbar>
 
-    <v-list>
-      <!-- Register Button -->
+    <v-list v-if="!guest">
       <v-list-item>
-        <v-btn depressed block rounded color="secondary" @click="register()">
-          Register <v-icon right light>person_add</v-icon>
-        </v-btn>
+        <v-list-item-avatar>
+          <img v-if="user.avatar == null" :src="getImage('/unavailable.png')">
+          <img v-else :src="getImage('/users/' + user.avatar)">
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>
+            {{user.name}}
+          </v-list-item-title>
+        </v-list-item-content>
       </v-list-item>
-      
-      <!-- Login Button -->
       <v-list-item>
-        <v-btn depressed block rounded color="secondary" @click="login()">
-          Login <v-icon right light>lock_open</v-icon>
+        <v-btn block small rounded depressed color="error lighten-1" class white--text @click.stop="logout()">
+          Logout
+          <v-icon small right dark> settings_power</v-icon>
         </v-btn>
       </v-list-item>
     </v-list>
@@ -35,18 +36,22 @@
       <v-divider></v-divider>
 
       <!-- Navigation Menu -->
-      <v-list-item 
-      v-for="(item, index) in items" 
-      :key="index" 
-      :href="item.route" 
-      :to="{name: item.route}">
-        <v-list-item-action>
-          <v-icon>{{item.icon}}</v-icon>
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>{{item.title}}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+      <template v-for="(item, index) in items">
+        <v-list-item 
+          v-if="!item.auth || (item.auth && !guest)"
+          :key="index" 
+          :href="item.route" 
+          :to="{name: item.route}">
+          
+          <v-list-item-action>
+            <v-icon>{{item.icon}}</v-icon>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <v-list-item-title>{{item.title}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </template>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -59,7 +64,8 @@ import { mapGetters, mapActions } from 'vuex'
       return {
         items: [
           { title: 'Home', icon: 'dashboard', route: 'home' },
-          { title: 'Profile', icon: 'account_box', route: 'profile' },
+          { title: 'Profile', icon: 'account_box', route: 'profile'},
+          { title: 'My Order', icon: 'shop_two', route: 'my-order'},
           { title: 'About', icon: 'gavel', route: 'about' },
         ],
       }
@@ -85,22 +91,32 @@ import { mapGetters, mapActions } from 'vuex'
         setAlert: 'alert/set',
         setStatusDialog: 'dialog/setStatus',
         setComponent: 'dialog/setComponent',
+        setAuth: 'auth/set'
       }),
-      login() {
-        this.setStatusDialog(true)
-        this.setComponent('login')
-        this.setSidebar(false)
-      },
-      register() {
-        this.setStatusDialog(true)
-        this.setComponent('register')
-        this.setSidebar(false)
-      },
-      test() {
-        this.setAlert({
-          status: true,
-          text: ':)',
-          type: 'success'
+      logout() {
+        let config = {
+          headers: {
+            'Authorization' : 'Bearer ' + this.user.api_token,
+          }
+        }
+
+        this.axios.post('/logout', {}, config) 
+        .then(() => {
+          this.setAuth({})
+          this.setAlert({
+            status: true,
+            text: 'Logout Successfully',
+            type: 'success'
+          })
+          this.setSideBar(false)
+        })
+        .catch((error) => {
+          let responses = error.message
+          this.setAlert({
+            status: true,
+            text: responses.data.message,
+            type: 'error'
+          })
         })
       }
     }

@@ -1,62 +1,88 @@
 <template>
-    <v-card class="view-form">
-        <v-toolbar light>
-            <v-btn icon light @click="close">
-                <v-icon>close</v-icon>
-            </v-btn>
-            <v-toolbar-title>Register</v-toolbar-title>
-        </v-toolbar>
-        
-        <v-divider></v-divider>
-
-        <v-container fluid>
-            <v-form ref="form" v-model="valid" lazy-validation>
-                <!-- Text field name -->
-                <v-text-field 
-                    outlined
-                    v-model="name" 
-                    :rules="nameRules" 
-                    :counter="255" 
-                    label="Full Name" 
-                    required 
-                    append-icon="person">
-                </v-text-field>
-                
-                <!-- Text Field Email -->
-                <v-text-field 
-                    outlined
-                    v-model="email" 
-                    :rules="emailRules" 
-                    label="Email" 
-                    required 
-                    append-icon="email">
-                </v-text-field>
-
-                <!-- Text Field Password -->
-                <v-text-field 
-                    outlined
-                    v-model="password" 
-                    :append-icon="showPassword ? 'visibility' : 'visibility_off'" 
-                    :rules="passwordRules" 
-                    :type="showPassword ? 'text' : 'password'" 
-                    label="Password" 
-                    hint="at least 6 character" 
-                    @click:append="showPassword = !showPassword">
-                </v-text-field>
-
-                <!-- Check Box -->
-                <v-checkbox v-model="checkbox" :rules="[v => !!v || 'You must agree to continue!']" label="Do you agree with our Privacy Policy?" required></v-checkbox>
-
-                <div class="text-center">
-                    <v-btn :disabled="!valid" @click="submit">
-                        submit
-                        <v-icon right dark>person_add</v-icon>
+  <v-app id="inspire">
+    <v-main>
+      <v-container
+        class="fill-height transparent"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col
+            cols="12"
+            sm="8"
+            md="4"
+          >
+            <v-card class="elevation-12">
+              <v-toolbar
+                color="primary"
+                dark
+                flat
+              >
+                <v-toolbar-title>Register form</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      icon
+                      large
+                      target="_blank"
+                      v-on="on"
+                      @click="close"
+                    >
+                      <v-icon>close</v-icon>
                     </v-btn>
-                    <v-btn @click="clear">clear</v-btn>
-                </div>
-            </v-form>
-        </v-container>
-    </v-card>
+                  </template>
+                  <span>Close</span>
+                </v-tooltip>
+              </v-toolbar>
+              <v-card-text>
+                <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-text-field
+                        name="Full Name"
+                        prepend-icon="mdi-account"
+                        type="text"
+                        v-model="name" 
+                        :rules="nameRules" 
+                        label="Full Name" 
+                        required 
+                    ></v-text-field>
+                    
+                    <v-text-field
+                        name="email"
+                        prepend-icon="email"
+                        type="text"
+                        v-model="email" 
+                        :rules="emailRules" 
+                        label="Email" 
+                        required 
+                    ></v-text-field>
+
+                    <v-text-field
+                        id="password"
+                        label="Password"
+                        name="password"
+                        prepend-icon="mdi-lock"
+                        v-model="password" 
+                        :append-icon="showPassword ? 'visibility' : 'visibility_off'" 
+                        :rules="passwordRules" 
+                        :type="showPassword ? 'text' : 'password'" 
+                        hint="at least 6 character" 
+                        @click:append="showPassword = !showPassword"
+                    ></v-text-field>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" :disabled="!valid" @click="submit">Register</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>

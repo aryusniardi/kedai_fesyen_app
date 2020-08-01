@@ -1,7 +1,26 @@
 <template>
-  <div>
-    <v-container>
-      <h1>This is profile page</h1>
-    </v-container>
-  </div>
+    <div class="container">
+        <v-subheader>Your Profile</v-subheader>
+        <v-card flat>
+            <v-simple-table>
+                <tbody>
+                    <tr v-for="(value, key) in user" :key="key">
+                        <td>{{key}}</td>
+                        <td>{{value}}</td>
+                    </tr>
+                </tbody>
+            </v-simple-table>
+        </v-card>
+    </div>
 </template>
+
+<script>
+import { mapGetters } from 'vuex'
+export default {
+    computed: {
+        ...mapGetters({
+            'user': 'auth/user'
+        })
+    }
+}
+</script>

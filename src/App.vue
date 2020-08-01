@@ -40,6 +40,7 @@ import CAlert from './components/CAlert'
 import Search from './views/Search'
 import Login from './views/auth/Login'
 import Register from './views/auth/Register'
+import Cart from './views/Cart'
 
 import { mapGetters, mapActions } from 'vuex'
 
@@ -53,7 +54,8 @@ export default {
     CAlert,
     Search,
     Login,
-    Register
+    Register,
+    Cart
   },
   methods: {
     ...mapActions({

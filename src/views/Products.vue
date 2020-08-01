@@ -30,17 +30,17 @@
                         </v-card-title>
 
                         <v-card-actions class="px-0">
-                        <v-card-subtitle class="pb-0 capitalize">
-                            <v-icon>store</v-icon>
-                            {{product.store}}
-                        </v-card-subtitle>
-                        
-                        <v-spacer></v-spacer>
+                            <v-card-subtitle class="pb-0 capitalize">
+                                <v-icon>store</v-icon>
+                                {{product.store}}
+                            </v-card-subtitle>
+                            
+                            <v-spacer></v-spacer>
 
-                        <v-card-subtitle class="pb-0">
-                            Stock
-                            ({{product.stock}})
-                        </v-card-subtitle>
+                            <v-card-subtitle class="pb-0">
+                                Stock
+                                ({{product.stock}})
+                            </v-card-subtitle>
                         </v-card-actions>
                     </v-card>
                 </v-flex>

@@ -1,9 +1,13 @@
 <template>
     <div>
-        <v-container grid-list-md>
-            <v-subheader>{{category.name}}</v-subheader>
-            <v-img v-if="category.image" :src="getImage('/categories/' + category.image)" height="250"></v-img>
-            <v-subheader>Product by "{{category.name}}" category</v-subheader>
+        <v-container grid-list-md class="category">
+            <v-img class="category-image" v-if="category.image" :src="getImage('/categories/' + category.image)" height="250">
+                <span>
+                    {{category.name}}
+                </span>
+            </v-img>
+
+            <v-subheader >Product by "<strong class="capitalize">{{category.name}}</strong>" category</v-subheader>
 
             <v-layout row wrap>
                 <v-flex v-for="(product, index) in products" xs12 sm6 md4 lg3 :key="index">
@@ -13,11 +17,10 @@
                         :to="'/product/' + product.slug"
                     >
                         <v-img
-                        class="white--text align-end"
-                        height="200px"
-                        :src="getImage('/product/' + product.image)"
-                        >
-                        </v-img>
+                            class="white--text align-end"
+                            height="200px"
+                            :src="getImage('/product/' + product.image)"
+                        ></v-img>
 
                         <v-card-title class="single-line">{{product.title}}</v-card-title>
 
@@ -74,18 +77,21 @@ export default {
     methods: {
         go() {
             let slug = this.$route.params.slug
-            let url = '/categories/slug' + slug
-            if(this.page > 0) url = url = '?page=' + this.page
+            let url = '/categories/slug/' + slug
+            if(this.page > 0) url = url + '?page=' + this.page
             url = encodeURI(url)
             this.axios.get(url)
             .then((response) => {
                 let response_data = response.data
                 let category = response_data.data
                 this.category = category
-                this.products = category.product.data
-                this.lengthPage = category.product.last_page
+                this.products = category.fashions.data
+                this.lengthPage = category.fashions.last_page
             })
         }
+    },
+    created() {
+        this.go()
     }
 }
 </script>

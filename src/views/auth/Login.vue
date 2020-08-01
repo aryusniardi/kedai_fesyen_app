@@ -1,46 +1,78 @@
 <template>
-    <v-card class="view-form">
-        <v-toolbar light>
-            <v-btn icon light @click="close">
-                <v-icon>close</v-icon>
-            </v-btn>
-            <v-toolbar-title>Login</v-toolbar-title>
-        </v-toolbar>
-
-        <v-divider></v-divider>
-
-        <v-container fluid>
-            <v-form ref="form" v-model="valid" lazy-validation> 
-                <!-- Text Field Email -->
-                <v-text-field 
-                    outlined 
+  <v-app id="inspire">
+    <v-main>
+      <v-container
+        class="fill-height transparent"
+        fluid
+      >
+        <v-row
+          align="center"
+          justify="center"
+        >
+          <v-col
+            cols="12"
+            sm="8"
+            md="4"
+          >
+            <v-card class="elevation-12">
+              <v-toolbar
+                color="primary"
+                dark
+                flat
+              >
+                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      icon
+                      large
+                      target="_blank"
+                      v-on="on"
+                      @click="close"
+                    >
+                      <v-icon>close</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Close</span>
+                </v-tooltip>
+              </v-toolbar>
+              <v-card-text>
+                <v-form ref="form" v-model="valid" lazy-validation>
+                  <v-text-field
+                    name="email"
+                    prepend-icon="mdi-account"
+                    type="text"
                     v-model="email" 
                     :rules="emailRules" 
                     label="Email" 
                     required 
-                    append-icon="email">
-                </v-text-field>
-                
-                <!-- Text Field Password -->
-                <v-text-field 
-                    outlined 
+                  ></v-text-field>
+
+                  <v-text-field
+                    id="password"
+                    label="Password"
+                    name="password"
+                    prepend-icon="mdi-lock"
                     v-model="password" 
                     :rules="passwordRules" 
                     :append-icon="showPassword ? 'visibility' : 'visibility_off'" 
                     :type="showPassword ? 'text' : 'password'" 
-                    label="password" 
                     hint="At least 6 characters" 
-                    @click:append="showPassword = !showPassword">
-                </v-text-field>
-
-                <div class="text-center">
-                    <v-btn :disabled="!valid" @click="submit" block>
-                        Login
-                    </v-btn>
-                </div>
-            </v-form>
-        </v-container>
-    </v-card>
+                    @click:append="showPassword = !showPassword"
+                  ></v-text-field>
+                </v-form>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="primary" :disabled="!valid" @click="submit">Login</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script>
@@ -66,6 +98,7 @@ export default {
     computed: {
         ...mapGetters({
             user: 'auth/user',
+            prevUrl: 'prevUrl'
         })
     },
     methods: {
@@ -98,22 +131,22 @@ export default {
                     } else {
                         this.setAlert({
                             status: true,
-                            text: 'Login error',
+                            text: 'Login Error',
                             type: 'error'
                         })
                     }
                 })
                 .catch((error) => {
                     let responses = error.response
+                    console.log(responses.data.message)
                     this.setAlert({
                         status: true,
-                        text: responses.data.error,
+                        text: responses.data.message,
                         type: 'error'
                     })
                 })
             }
         }
     },
-
 }
 </script>

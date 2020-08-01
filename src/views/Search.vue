@@ -1,8 +1,8 @@
 <template>
     <v-card>
-        <v-toolbar light>
+        <v-toolbar dark>
             <!-- Close Button -->
-            <v-btn icon light @click.native="close">
+            <v-btn icon dark @click.native="close">
                 <v-icon>close</v-icon>
             </v-btn>
 
@@ -19,6 +19,7 @@
                 dense
                 outlined
                 clearable
+                solo-inverted
                 type="text"
                 ref="txtSearch"></v-text-field>
         </v-toolbar>
@@ -38,7 +39,7 @@
                 <v-list-item
                     :key="item.id" 
                     @click="close" 
-                    :to="'/fashion/' + item.slug"
+                    :to="'/product/' + item.slug"
                 >
                     <v-list-item-avatar>
                         <img :src="getImage('/product/' + item.image)" alt="">
