@@ -11,39 +11,43 @@
 
             <v-layout row wrap>
                 <v-flex v-for="(product, index) in products" xs12 sm6 md4 lg3 :key="index">
-                    <v-card
-                        class="mx-auto pb-4"
-                        max-width="400"
-                        :to="'/product/' + product.slug"
-                    >
-                        <v-img
-                            class="white--text align-end"
-                            height="200px"
-                            :src="getImage('/product/' + product.image)"
-                        ></v-img>
+                    <v-hover v-slot:default="{ hover }">
+                        <v-card
+                            :elevation="hover ? 12 : 2"
+                            :class="{ 'on-hover': hover }"
+                            class="mx-auto pb-4"
+                            max-width="400"
+                            :to="'/product/' + product.slug"
+                        >
+                            <v-img
+                                class="white--text align-end"
+                                height="200px"
+                                :src="getImage('/product/' + product.image)"
+                            ></v-img>
 
-                        <v-card-title class="single-line">{{product.title}}</v-card-title>
+                            <v-card-title class="single-line">{{product.title}}</v-card-title>
 
-                        <v-card-title class="price-tag">
-                            <strong>
-                            Rp. {{product.price.toLocaleString('id-ID')}}
-                            </strong>
-                        </v-card-title>
+                            <v-card-title class="price-tag">
+                                <strong>
+                                Rp. {{product.price.toLocaleString('id-ID')}}
+                                </strong>
+                            </v-card-title>
 
-                        <v-card-actions class="px-0">
-                            <v-card-subtitle class="pb-0 capitalize">
-                                <v-icon>store</v-icon>
-                                {{product.store}}
-                            </v-card-subtitle>
-                            
-                            <v-spacer></v-spacer>
+                            <v-card-actions class="px-0">
+                                <v-card-subtitle class="pb-0 capitalize">
+                                    <v-icon>store</v-icon>
+                                    {{product.store}}
+                                </v-card-subtitle>
+                                
+                                <v-spacer></v-spacer>
 
-                            <v-card-subtitle class="pb-0">
-                                Stock
-                                ({{product.stock}})
-                            </v-card-subtitle>
-                        </v-card-actions>
-                    </v-card>
+                                <v-card-subtitle class="pb-0">
+                                    Stock
+                                    ({{product.stock}})
+                                </v-card-subtitle>
+                            </v-card-actions>
+                        </v-card>
+                    </v-hover>
                 </v-flex>
             </v-layout>
 

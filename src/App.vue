@@ -41,6 +41,7 @@ import Search from './views/Search'
 import Login from './views/auth/Login'
 import Register from './views/auth/Register'
 import Cart from './views/Cart'
+import EditProfile from './views/EditProfile'
 
 import { mapGetters, mapActions } from 'vuex'
 
@@ -55,7 +56,8 @@ export default {
     Search,
     Login,
     Register,
-    Cart
+    Cart,
+    EditProfile
   },
   methods: {
     ...mapActions({

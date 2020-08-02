@@ -17,8 +17,7 @@
                 <v-col md="6" sm="12" xs="12">
                     <p class="ml-3 mb-0 color-primary capitalize"><v-icon class="color-primary">store</v-icon> {{product.store}}</p>
                     <v-subheader class="title">{{product.title}}</v-subheader>
-                    <v-simple-table
-                        >
+                    <v-simple-table>
                         <template v-slot:default>
                             <tbody>
                                 <tr>
@@ -38,9 +37,10 @@
                     </v-simple-table>
                     
                     <v-btn
-                        class="mt-3 capitalize"
-                        style="font-size: 12px !important;"
+                        class="mt-4 capitalize"
+                        style="font-size: 14px !important;"
                         block
+                        large
                         color="primary"
                         @click="buy"
                     > 
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
     data() {
         return {
@@ -65,16 +65,35 @@ export default {
     methods: {
         ...mapActions({
             addCart: 'cart/add',
-            setAlert: 'alert/set'
+            setAlert: 'alert/set',
+            setStatusDialog: 'dialog/setStatus',
         }),
         buy() {
-            this.addCart(this.product),
-            this.setAlert({
-                status: true,
-                text: 'Added to Cart',
-                type: 'success'
-            })
-        }
+            if(!this.guest) {
+                this.addCart(this.product),
+                this.setAlert({
+                    status: true,
+                    text: 'Added to Cart',
+                    type: 'success'
+                })
+            } else {
+                this.setAlert({
+                    status: true,
+                    text: 'Login terlebih dahulu',
+                    type: 'error'
+                })
+                this.$router.push({name: 'login'})
+            }
+        },
+        close() {
+            this.setStatusDialog(false)
+        },
+    },
+    computed: {
+        ...mapGetters({
+            guest: 'auth/guest',
+            prevUrl: 'prevUrl'
+        })
     },
     created() {
         let slug = this.$route.params.slug

@@ -1,78 +1,52 @@
 <template>
-  <v-app id="inspire">
-    <v-main>
-      <v-container
-        class="fill-height transparent"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
+  <v-container>
+    <v-col 
+      class="mx-auto"
+      cols="12"
+      sm="8"
+      md="6"
+    >
+      <v-card flat>
+        <v-toolbar
+          color="white"
+          light
+          flat
         >
-          <v-col
-            cols="12"
-            sm="8"
-            md="4"
-          >
-            <v-card class="elevation-12">
-              <v-toolbar
-                color="primary"
-                dark
-                flat
-              >
-                <v-toolbar-title>Login form</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      icon
-                      large
-                      target="_blank"
-                      v-on="on"
-                      @click="close"
-                    >
-                      <v-icon>close</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Close</span>
-                </v-tooltip>
-              </v-toolbar>
-              <v-card-text>
-                <v-form ref="form" v-model="valid" lazy-validation>
-                  <v-text-field
-                    name="email"
-                    prepend-icon="mdi-account"
-                    type="text"
-                    v-model="email" 
-                    :rules="emailRules" 
-                    label="Email" 
-                    required 
-                  ></v-text-field>
+          <v-toolbar-title><strong>Login form</strong></v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field
+              name="email"
+              prepend-icon="mdi-account"
+              type="text"
+              v-model="email" 
+              :rules="emailRules" 
+              label="Email" 
+              required 
+            ></v-text-field>
 
-                  <v-text-field
-                    id="password"
-                    label="Password"
-                    name="password"
-                    prepend-icon="mdi-lock"
-                    v-model="password" 
-                    :rules="passwordRules" 
-                    :append-icon="showPassword ? 'visibility' : 'visibility_off'" 
-                    :type="showPassword ? 'text' : 'password'" 
-                    hint="At least 6 characters" 
-                    @click:append="showPassword = !showPassword"
-                  ></v-text-field>
-                </v-form>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" :disabled="!valid" @click="submit">Login</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
-  </v-app>
+            <v-text-field
+              id="password"
+              label="Password"
+              name="password"
+              prepend-icon="mdi-lock"
+              v-model="password" 
+              :rules="passwordRules" 
+              :append-icon="showPassword ? 'visibility' : 'visibility_off'" 
+              :type="showPassword ? 'text' : 'password'" 
+              hint="At least 6 characters" 
+              @click:append="showPassword = !showPassword"
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn block color="primary" :disabled="!valid" @click="submit">Login</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-col>
+  </v-container>
 </template>
 
 <script>
@@ -108,7 +82,7 @@ export default {
             setAuth : 'auth/set'
         }),
         close() {
-            this.setStatusDialog(false)
+          this.$router.push({name: 'home'})
         },
         submit() {
             if(this.$refs.form.validate()) {
@@ -126,8 +100,7 @@ export default {
                             text: 'Login Success',
                             type: 'success'
                         })
-                        if (this.prevUrl.length > 0) this.$router.push(this.prevUrl)
-                            this.close()
+                        this.$router.push({name: 'home'})
                     } else {
                         this.setAlert({
                             status: true,

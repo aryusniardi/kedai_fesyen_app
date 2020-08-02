@@ -1,17 +1,13 @@
 <template>
     <v-card>
         <!-- Toolbar -->
-        <v-toolbar dark>
-            <v-btn icon dark @click="close">
+        <v-toolbar light flat>
+            <v-btn icon ligh @click="close">
                 <v-icon>close</v-icon>
             </v-btn>
             <v-toolbar-title>Your Shopping Cart</v-toolbar-title>
         </v-toolbar>
         <!-- End of Toolbar -->
-
-        <!-- Divider -->
-        <v-divider></v-divider>
-        <!-- End of Divider -->
 
         <!-- Cart -->
         <v-container fluid>
@@ -34,7 +30,7 @@
                                 Rp. {{item.price.toLocaleString('id-ID')}}
                                 ({{item.weight}} kg)
                                 <span style="float:right">
-                                    <v-btn icon small rounded depressed @click.stop="removeCart(item)" :disabled="totalQuantity == 1">
+                                    <v-btn icon small rounded depressed @click.stop="removeCart(item)">
                                         <v-icon dark color="error">mdi-minus-circle</v-icon>
                                     </v-btn>
                                     {{item.quantity}}
@@ -77,7 +73,8 @@ export default {
             countCart: 'cart/count',
             totalPrice: 'cart/totalPrice',
             totalQuantity: 'cart/totalQuantity',
-            totalWeight: 'cart/totalWeight'
+            totalWeight: 'cart/totalWeight',
+            guest: 'auth/guest'
         })
     },
     methods: {

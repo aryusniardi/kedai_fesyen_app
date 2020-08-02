@@ -1,29 +1,30 @@
 <template>
-<div>
-  <v-app-bar
-    clipped-left
-    dark
-    dense>
+  <v-app-bar color="white" flat>
+
+    <!-- Navigation Toggle -->
     <v-app-bar-nav-icon v-if="isHome && !guest" @click="setSidebar(!sidebar)"></v-app-bar-nav-icon>
 
+    <!-- Previous Page -->
     <v-btn v-if="!isHome" icon @click="$router.go(-1)">
-      <v-icon>arrow_back</v-icon>
+      <v-icon>arrow_back_ios</v-icon>
     </v-btn>
 
-    <v-spacer v-if="!guest"></v-spacer>
+    <v-spacer v-if="!guest || isHome"></v-spacer>
 
-      <v-img
-        :src="require('@/assets/kedai_fesyen_icon.png')"
-        contain
-        height="42"
-        width="42"
-        max-width="48"
-        @click="$vuetify.goTo(0)"
-      />
-      <v-toolbar-title>Kedai Fesyen</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
+    <!-- Title -->
+    <v-img
+      :src="require('@/assets/kedai_fesyen_icon.png')"
+      contain
+      height="42"
+      width="42"
+      max-width="48"
+      @click="$vuetify.goTo(0)"
+    />
+    <v-toolbar-title>Kedai Fesyen</v-toolbar-title>
+    
+    <v-spacer v-if="isHome || !guest"></v-spacer>
+    
+    <!-- Button Cart -->
     <v-btn v-if="!guest" icon @click="cart()">
       <v-badge right overlap color="red">
         <span slot="badge" v-if="countCart > 0">{{countCart}}</span>
@@ -32,38 +33,33 @@
       </v-badge>
     </v-btn>
 
+    <!-- Register & Login Button -->
     <template v-if="guest && isHome">
-      <v-btn text x-small color="white" class="capitalize" @click="register()">
+      <v-btn text x-small color="primary" class="capitalize" @click="register()">
         Register 
-        <!-- <v-icon right light>person_add</v-icon> -->
       </v-btn>
 
-      <v-btn outlined color="white" x-small class="capitalize" @click="login()">
+      <v-btn outlined color="primary" x-small class="capitalize" @click="login()">
         Login
-         <!-- <v-icon right light>lock_open</v-icon> -->
       </v-btn>
     </template>
 
+    <!-- Search Text Field -->
     <v-text-field
       v-if="isHome" 
       @click="search()"
-      slot="extension" 
+      slot="extension"
       hide-details
       append-icon="mic" 
-      text 
       label="Search" 
       prepend-inner-icon="search" 
-      solo
-      flat
       dense
-      outlined
+      solo
+      single-line
       clearable
-      solo-inverted
       type="text"
     ></v-text-field>
-
   </v-app-bar>
-  </div>
 </template>
 
 <script>
@@ -87,15 +83,11 @@ export default {
       this.setSidebar(false)
     },
     login() {
-        this.setStatusDialog(true)
-        this.setComponent('login')
-        this.setSidebar(false)
-      },
-      register() {
-        this.setStatusDialog(true)
-        this.setComponent('register')
-        this.setSidebar(false)
-      },
+      this.$router.push({name: 'login'})
+    },
+    register() {
+      this.$router.push({name: 'register'})
+    },
   },
   computed: {
     ...mapGetters({

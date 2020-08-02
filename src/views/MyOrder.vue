@@ -9,11 +9,15 @@
                             <td>
                                 <br>
                                 Invoice: {{item.invoice_number}}
-                                <div class="primary--text title">Rp. {{item.total_price.toLocaleString('id-ID')}}</div>
-                                <small>date: {{item.updated_at}} . courier: {{item.courier_service}}</small>
+                                <div class="price-tag title">Rp. {{item.total_price.toLocaleString('id-ID')}}</div>
+                                <small>Date: {{item.updated_at}}</small>
                             </td>
-                            <td>
-                                {{item.status}}
+                            <td style="vertical-align: bottom">
+                                <v-btn small outlined color="primary" class="capitalize" :to="'/order/' + item.invoice_number">
+                                    Detail
+                                <!-- {{item.status}} -->
+                                    <v-icon class="align-end ml-1">navigate_next</v-icon>
+                                </v-btn>
                             </td>
                         </tr>
                     </tbody>

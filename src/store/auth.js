@@ -6,7 +6,7 @@ export default {
     mutations: {
         set: (state, payload) => {
             state.user = payload
-        }
+        },
     },
     actions: {
         set: ({commit}, payload) => {

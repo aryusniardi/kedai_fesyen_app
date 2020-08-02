@@ -86,7 +86,7 @@
                                     <div class="title"> {{totalBill.toLocaleString('id-ID')}} </div>
                                 </v-flex>
                                 <v-flex xs6 text-center>
-                                    <v-btn color="orange" @click="dialogConfirm=true" :disabled="totalBill == 0">
+                                    <v-btn class="white--text" color="orange" @click="dialogConfirm=true" :disabled="totalBill == 0">
                                         <v-icon light> attach_money </v-icon>
                                         Pay
                                     </v-btn>
@@ -169,13 +169,6 @@ export default {
             setPayment: 'setPayment'
         }),
         saveShipping() {
-            console.log(this.user.api_token)
-            console.log(this.name)
-            console.log(this.address)
-            console.log(this.phone)
-            console.log(this.province_id)
-            console.log(this.city_id)
-
             if (this.$refs.form.validate()) {
                 let formData = {
                     'name': this.name,

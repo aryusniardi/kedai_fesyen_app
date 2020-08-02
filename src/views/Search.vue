@@ -1,8 +1,8 @@
 <template>
     <v-card>
-        <v-toolbar dark>
+        <v-toolbar light flat>
             <!-- Close Button -->
-            <v-btn icon dark @click.native="close">
+            <v-btn icon light @click.native="close">
                 <v-icon>close</v-icon>
             </v-btn>
 
@@ -14,17 +14,13 @@
                 text 
                 label="Search" 
                 prepend-inner-icon="search" 
-                solo
-                flat
                 dense
-                outlined
+                solo
+                single-line
                 clearable
-                solo-inverted
                 type="text"
                 ref="txtSearch"></v-text-field>
         </v-toolbar>
-
-        <v-divider></v-divider>
 
         <v-list subheader>
             <v-subheader v-if="keyword.length > 0">

@@ -1,44 +1,37 @@
 <template>
-  <v-app id="inspire">
-    <v-main>
-      <v-container
-        class="fill-height transparent"
-        fluid
-      >
-        <v-row
-          align="center"
-          justify="center"
-        >
-          <v-col
+    <v-container>
+        <v-col 
+            class="mx-auto"
             cols="12"
             sm="8"
-            md="4"
-          >
-            <v-card class="elevation-12">
-              <v-toolbar
-                color="primary"
-                dark
-                flat
-              >
-                <v-toolbar-title>Register form</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      icon
-                      large
-                      target="_blank"
-                      v-on="on"
-                      @click="close"
-                    >
-                      <v-icon>close</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Close</span>
-                </v-tooltip>
-              </v-toolbar>
-              <v-card-text>
+            md="6"
+        >
+            <v-card flat>
+                <v-toolbar
+                    color="white"
+                    light
+                    flat
+                >
+                <v-toolbar-title><strong>Register form</strong></v-toolbar-title>
+                </v-toolbar>
+                <v-card-text>
+                <v-row justify="space-around" class="py-5">
+                    <template v-if="avatar.length > 0">
+                        <v-avatar height="100" width="100">
+                            <img :src="avatar">
+                        </v-avatar>
+                    </template>
+                </v-row>
                 <v-form ref="form" v-model="valid" lazy-validation>
+                    <!-- <v-file-input
+                        v-model="avatar" 
+                        :rules="rules"
+                        type="file"
+                        v-on:change="previewImage()"
+                        hide-input
+                        accept="image/png, image/jpeg, image/bmp"
+                        prepend-icon="mdi-camera"
+                    ></v-file-input> -->
                     <v-text-field
                         name="Full Name"
                         prepend-icon="mdi-account"
@@ -72,17 +65,14 @@
                         @click:append="showPassword = !showPassword"
                     ></v-text-field>
                 </v-form>
-              </v-card-text>
-              <v-card-actions>
+                </v-card-text>
+                <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="primary" :disabled="!valid" @click="submit">Register</v-btn>
-              </v-card-actions>
+                <v-btn block color="primary" :disabled="!valid" @click="submit">Register</v-btn>
+                </v-card-actions>
             </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
-  </v-app>
+        </v-col>
+    </v-container>
 </template>
 
 <script>
@@ -97,11 +87,15 @@ export default {
                 v => !!v || 'Name is required',
                 v => (v && v.length <= 255) || 'Name must be less than 255 characters!'
             ],
-
             email: '',
             emailRules: [
                 v => !!v || 'E-mail is required',
                 v => /([a-zA-Z0-9_]{1,})(@)([a-zA-Z0-9_]{2,}).([a-zA-Z0-9_]{2,})+/.test(v) || 'E-mail must be valid'
+            ],
+
+            avatar: [],
+            rules: [
+                value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
             ],
 
             showPassword: false,
@@ -132,6 +126,7 @@ export default {
                 let formData = new FormData()
                 formData.set('name', this.name)
                 formData.set('email', this.email)
+                formData.append('avatar', this.avatar)
                 formData.set('password' , this.password)
 
                 this.axios.post('/register', formData)
@@ -143,7 +138,7 @@ export default {
                         text: 'Register successfully',
                         type: 'success'
                     })
-                    this.close()
+                    this.$router.push({name: 'home'})
                 })
                 .catch((error) => {
                     console.log(error)
@@ -158,6 +153,17 @@ export default {
         },
         clear() {
             this.$refs.form.reset()
+        },
+        previewImage() {
+            var input = event.target;
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = (e) => {
+                    this.avatar = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+            console.log(this.avatar)
         }
     }
 }

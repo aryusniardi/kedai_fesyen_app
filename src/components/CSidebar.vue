@@ -5,36 +5,36 @@
     absolute 
     clipped 
     dense>
-    <v-toolbar dark>
-      <!-- Closed Navigation Button -->
-      <v-btn icon dark @click="drawer=false">
-        <v-icon>close</v-icon>
-      </v-btn>
+
+    <v-toolbar light flat>
+        <v-btn icon light dark--text @click="drawer=false">
+            <v-icon>close</v-icon>
+        </v-btn>
+        <v-toolbar-title>Bookstore</v-toolbar-title>
     </v-toolbar>
 
     <v-list v-if="!guest">
-      <v-list-item>
+      <v-list-item two-line>
         <v-list-item-avatar>
-          <img v-if="user.avatar == null" :src="getImage('/unavailable.png')">
+          <img v-if="user.avatar == null" src="https://randomuser.me/api/portraits/men/81.jpg">
           <img v-else :src="getImage('/users/' + user.avatar)">
         </v-list-item-avatar>
+
         <v-list-item-content>
-          <v-list-item-title>
-            {{user.name}}
-          </v-list-item-title>
+          <v-list-item-title class="capitalize">{{user.name}}</v-list-item-title>
+          <v-list-item-subtitle>{{user.email}}</v-list-item-subtitle>
+
         </v-list-item-content>
       </v-list-item>
-      <v-list-item>
-        <v-btn block small rounded depressed color="error lighten-1" class white--text @click.stop="logout()">
+      
+      <div class="px-4 ">
+        <v-btn small rounded outlined block color="error" class white--text @click.stop="logout()">
           Logout
           <v-icon small right dark> settings_power</v-icon>
         </v-btn>
-      </v-list-item>
+      </div>
     </v-list>
-
     <v-list dense>
-      <v-divider></v-divider>
-
       <!-- Navigation Menu -->
       <template v-for="(item, index) in items">
         <v-list-item 
@@ -63,10 +63,10 @@ import { mapGetters, mapActions } from 'vuex'
     data () {
       return {
         items: [
-          { title: 'Home', icon: 'dashboard', route: 'home' },
-          { title: 'Profile', icon: 'account_box', route: 'profile'},
-          { title: 'My Order', icon: 'shop_two', route: 'my-order'},
-          { title: 'About', icon: 'gavel', route: 'about' },
+          { title: 'Home', icon: 'home', route: 'home' },
+          { title: 'Profile', icon: 'perm_identity', route: 'profile'},
+          { title: 'My Order', icon: 'history', route: 'my-order'},
+          { title: 'About', icon: 'help', route: 'about' },
         ],
       }
     },
@@ -74,7 +74,7 @@ import { mapGetters, mapActions } from 'vuex'
       ...mapGetters({
         sidebar: 'sidebar',
         user: 'auth/user',
-        guest: 'auth/guest'
+        guest: 'auth/guest',
       }),
       drawer: {
         get() {

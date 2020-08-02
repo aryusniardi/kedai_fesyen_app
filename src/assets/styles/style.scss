@@ -21,10 +21,6 @@ $color-dark-3: rgb(58, 58, 60);
 $color-dark-4: rgb(44, 44, 46);
 $color-dark-5: rgb(28, 28, 30);
 
-* {
-    // font-family: 'Montserrat', sans-serif;
-}
-
 body, .bg-light {
     background-color: $color-light-1 !important;
 }
@@ -34,9 +30,7 @@ body, .bg-light {
     margin-bottom: 20px;
 }
 
-.v-footer, .v-toolbar {
-    background: darken($color: $color-blue, $amount: 10) !important;
-
+.v-footer {
     .v-card {
         background: darken($color: $color-blue, $amount: 10) !important;
         width: 100%;
@@ -141,6 +135,7 @@ body, .bg-light {
         color: $color-dark-2 !important;
     }
 }
+
 .capitalize {
     text-transform: capitalize;
 }
@@ -163,5 +158,20 @@ body, .bg-light {
 }
 
 .color-primary{
-    color: $color-blue !important;
+    color: darken($color: $color-blue, $amount: 10) !important;
+}
+
+.profile {
+
+    .v-subheader {
+        font-size: 18px !important;
+    }
+}
+
+.background-image-about {
+    background: linear-gradient(to bottom, white, black);
+}
+
+.input-picture {
+    background-color: black !important;
 }
