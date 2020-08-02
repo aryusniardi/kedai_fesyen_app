@@ -4,7 +4,7 @@
         <v-row justify="space-around" class="py-5">
             <v-avatar height="100" width="100">
                 <img v-if="user.avatar == null" src="https://randomuser.me/api/portraits/men/1.jpg">
-                <img v-else :src="getImage('/users/' + user.avatar)">
+                <img v-else :src="getImage('/avatar/' + user.avatar)">
             </v-avatar>
         </v-row> 
         <v-card flat>

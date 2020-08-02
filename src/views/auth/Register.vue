@@ -64,9 +64,10 @@
                         hint="at least 6 character" 
                         @click:append="showPassword = !showPassword"
                     ></v-text-field>
-                        <label>File
+                        <label>Avatar
                             <input type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFileUpload()"/>
                         </label>
+                        <img v-if="url_img" :src="url_img" height="100" width="100" />
                 </v-form>
                 </v-card-text>
                 <v-card-actions>
@@ -102,6 +103,7 @@ export default {
             ],
 
             gambar: '',
+            url_img: null,
 
             showPassword: false,
             password: '',
@@ -172,6 +174,7 @@ export default {
         },
         onChangeFileUpload(){
             this.gambar = this.$refs.file.files[0];
+            this.url_img = URL.createObjectURL(this.gambar);
         }
     }
 }
