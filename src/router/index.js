@@ -82,6 +82,9 @@ const router = new Router ({
       path: '/order/:invoice_number',
       name: 'order',
       component: () => import('../views/detail/Order.vue'),
+      meta: {
+        auth: true
+      }
     }
   ]
 })

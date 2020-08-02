@@ -19,7 +19,14 @@
                         ></v-select>
                         <v-select label="city" v-model="city_id" v-if="province_id > 0" :items="citiesByProvince" item-text="city" item-value="id" persistent-hint single-line></v-select>
                     </v-form>
-                    <v-subheader>Your Shopping Cart</v-subheader>
+                    <v-card-actions>
+                        <v-btn block color="success" dark @click="saveShipping">
+                            <v-icon> save</v-icon> &nbsp;
+                            Save
+                        </v-btn>
+                    </v-card-actions>
+
+                    <v-subheader class="mt-4">Your Shopping Cart</v-subheader>
                     <div v-if="countCart">
                         <v-card flat>
                             <v-list three-line v-if="countCart > 0">
@@ -78,7 +85,7 @@
                     </div>
 
                     <v-subheader>Total</v-subheader>
-                    <v-card>
+                    <v-card flat>
                         <v-container>
                             <v-layout row wrap>
                                 <v-flex xs6 text-center>
@@ -86,7 +93,7 @@
                                     <div class="title"> {{totalBill.toLocaleString('id-ID')}} </div>
                                 </v-flex>
                                 <v-flex xs6 text-center>
-                                    <v-btn class="white--text" color="orange" @click="dialogConfirm=true" :disabled="totalBill == 0">
+                                    <v-btn block class="white--text" color="orange" @click="dialogConfirm=true" :disabled="totalBill == 0">
                                         <v-icon light> attach_money </v-icon>
                                         Pay
                                     </v-btn>
@@ -98,7 +105,7 @@
                     <template>
                         <v-layout row justify-center>
                             <v-dialog v-model="dialogConfirm" persistent max-width="250">
-                                <v-card>
+                                <v-card flat>
                                     <v-card-title class="headline">Confirmation</v-card-title>
                                     <v-card-text>If you continue, transaction will be processed</v-card-text>
                                     <v-card-actions>
@@ -111,12 +118,6 @@
                         </v-layout>
                     </template>
                 </v-container>
-                <v-card-actions>
-                    <v-btn color="success" dark @click="saveShipping">
-                        <v-icon> save</v-icon> &nbsp;
-                        Save
-                    </v-btn>
-                </v-card-actions>
             </v-card>
         </div>
     </v-container>
@@ -267,8 +268,6 @@ export default {
                     'Authorization': 'Bearer ' + this.user.api_token
                 }
             }
-
-            console.log(safeCart)
 
             this.axios.post('/payment', formData, config)
             .then((response) => {

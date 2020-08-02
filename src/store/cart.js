@@ -1,8 +1,14 @@
+const empty = () => {
+    return {
+        carts: []
+    }
+}
+
+const state = empty()
+
 export default {
     namespaced: true,
-    state: {
-        carts: [],
-    },
+    state,
     mutations: {
         insert: (state, payload) => {
             state.carts.push({
@@ -43,8 +49,14 @@ export default {
                 state.carts.splice(idx, 1)
             }
         },
+        resetState(state) {
+            Object.assign(state, empty())
+        }
     },
     actions: {
+        resetCartState({commit}) {
+            commit('resetState')
+        },
         add: ({state, commit}, payload) => {
             let cartItem = state.carts.find(item => item.id === payload.id)
 
@@ -56,13 +68,14 @@ export default {
         },
         set: (state, payload) => {
             state.carts = payload
-        }
+        },
     },
     getters: {
         carts: state => state.carts,
         count: (state) => {
             return state.carts.length
         },
+        
         totalQuantity: (state) => {
             if (state.carts.length > 0) {
                 return state.carts.reduce((total, product) => total + product.quantity, 0)
@@ -72,7 +85,7 @@ export default {
         },
         totalPrice: (state) => {
             if (state.carts.length > 0) {
-                return state.carts.reduce((total, product) => (total + product.quantity) * product.price, 0)
+                return state.carts.reduce((total, product) => total + product.quantity * product.price, 0)
             } else {
                 return 0
             }
@@ -83,6 +96,6 @@ export default {
             } else {
                 return 0
             }
-        }
+        },
     }
 }

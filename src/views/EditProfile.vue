@@ -4,6 +4,13 @@
       <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
           <v-col cols="12" sm="8" md="6">
+            <v-row justify="space-around" class="py-5">
+                <template v-if="url_img">
+                    <v-avatar height="100" width="100">
+                        <img :src="url_img">
+                    </v-avatar>
+                </template>
+            </v-row>
             <v-card>
                 <v-toolbar
                     color="white" light flat>
@@ -17,7 +24,7 @@
                     </v-btn>
                 </v-toolbar>
                 <v-card-text>
-                    <v-form ref="form" lazy-validation>
+                    <v-form ref="form" lazy-validation>                        
                         <v-text-field 
                             label="Name" 
                             v-model="name" 
@@ -36,9 +43,8 @@
                             :append-icon="showPassword ? 'visibility' : 'visibility_off'" 
                             :rules="passwordRules" 
                             :type="showPassword ? 'text' : 'password'" 
-                            label="password" 
-                            hint="at least 6 character" 
-                            counter 
+                            label="Password Baru" 
+                            required
                             @click:append="showPassword = !showPassword">
                         </v-text-field>
                         <v-textarea 
@@ -54,6 +60,9 @@
                             required 
                             append-icon="phone">
                         </v-text-field>
+
+                        <input required class="v_input input" type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFileUpload()"/>
+
                         <v-select 
                             v-model="province_id" 
                             label="Province" 
@@ -90,7 +99,9 @@ import { mapGetters, mapActions } from 'vuex'
             password: '',
             name: '',
             address: '',
+            url_img: null,
             phone: '',
+            gambar: '',
             province_id: 0,
             city_id: 0,
             dialogConfirm: false,
@@ -142,12 +153,30 @@ import { mapGetters, mapActions } from 'vuex'
                     'province_id': this.province_id,
                     'city_id': this.city_id
                 }
+                
                 let config = {
                     headers: {
                         'Accept': 'application/json',
                         'Authorization': 'Bearer ' + this.user.api_token
                     },
                 }
+
+                let dataForm = new FormData()
+                dataForm.append('avatar', this.gambar)
+
+                this.axios.post('/edit-image', dataForm, config)
+                .then(() => {
+                    console.log('updated image')
+                })
+                .catch((error) => {
+                    console.log(error)
+                    let responses = error.response
+                    this.setAlert({
+                        status: true,
+                        text: responses.data.message,
+                        type: 'error'
+                    })
+                })
 
                 this.axios.post('/update-profile', formData, config)
                 .then((response) => {
@@ -167,6 +196,10 @@ import { mapGetters, mapActions } from 'vuex'
                     })
                 })
             }
+        },
+        onChangeFileUpload(){
+            this.gambar = this.$refs.file.files[0];
+            this.url_img = URL.createObjectURL(this.gambar);
         }
     },
     created() {

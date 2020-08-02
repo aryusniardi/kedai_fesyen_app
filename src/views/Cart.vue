@@ -26,7 +26,7 @@
 
                         <v-list-item-content>
                             <v-list-item-title v-html="item.title"></v-list-item-title>
-                            <v-list-item-subtitle>
+                            <v-list-item-subtitle v-if="item.price">
                                 Rp. {{item.price.toLocaleString('id-ID')}}
                                 ({{item.weight}} kg)
                                 <span style="float:right">
@@ -43,7 +43,7 @@
                     </v-list-item>
                 </template>
             </v-list>
-            <v-card>
+            <v-card flat>
                 <v-card-text>
                     <v-layout wrap>
                         <v-flex pa-1 xs6>
@@ -94,8 +94,5 @@ export default {
             this.setStatusDialog(false)
         }
     },
-    created() {
-        console.log(this.carts)
-    }
 }
 </script>

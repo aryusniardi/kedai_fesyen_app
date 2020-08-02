@@ -16,22 +16,15 @@
                 </v-toolbar>
                 <v-card-text>
                 <v-row justify="space-around" class="py-5">
-                    <template v-if="avatar.length > 0">
+                    <template v-if="url_img">
                         <v-avatar height="100" width="100">
-                            <img :src="avatar">
+                            <img :src="url_img">
                         </v-avatar>
                     </template>
                 </v-row>
                 <v-form ref="form" v-model="valid" lazy-validation>
-                    <!-- <v-file-input
-                        v-model="avatar" 
-                        :rules="rules"
-                        type="file"
-                        v-on:change="previewImage()"
-                        hide-input
-                        accept="image/png, image/jpeg, image/bmp"
-                        prepend-icon="mdi-camera"
-                    ></v-file-input> -->
+                    <input required class="v_input input" type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFileUpload()"/>
+
                     <v-text-field
                         name="Full Name"
                         prepend-icon="mdi-account"
@@ -64,10 +57,6 @@
                         hint="at least 6 character" 
                         @click:append="showPassword = !showPassword"
                     ></v-text-field>
-                        <label>Avatar
-                            <input type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFileUpload()"/>
-                        </label>
-                        <img v-if="url_img" :src="url_img" height="100" width="100" />
                 </v-form>
                 </v-card-text>
                 <v-card-actions>

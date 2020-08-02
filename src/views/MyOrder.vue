@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-subheader>History Belanja</v-subheader>
+        <v-subheader><strong>History Belanja</strong></v-subheader>
         <v-card flat>
             <v-container>
                 <v-simple-table>
@@ -48,7 +48,8 @@ export default {
     mounted() {
         let config = {
             headers: {
-                'Authorization': 'Bearer ' + this.user.api_token
+                'Authorization': 'Bearer ' + this.user.api_token,
+                'Accept' : 'application/json'
             }
         }
 
@@ -56,6 +57,7 @@ export default {
         .then((response) => {
             let {data} = response.data
             this.items = data
+            console.log(this.items)
         })
         .catch((error) => {
             let {data} = error.response

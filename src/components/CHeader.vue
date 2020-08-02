@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="white" flat>
+  <v-app-bar color="white" flat dense max-height="75">
 
     <!-- Navigation Toggle -->
     <v-app-bar-nav-icon v-if="isHome && !guest" @click="setSidebar(!sidebar)"></v-app-bar-nav-icon>

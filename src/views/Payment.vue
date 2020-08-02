@@ -28,7 +28,7 @@
         </v-card>
 
         <v-subheader></v-subheader>
-        <v-card>
+        <v-card flat>
             <v-container>
                 <v-layout row wrap>
                     <v-flex s12 text-center>
@@ -41,20 +41,33 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
     computed: {
         ...mapGetters({
             payment: 'payment',
+            carts: 'cart/carts',
         }),
     },
     methods: {
+        ...mapActions({
+            setCart: 'cart/set',
+            setAlert: 'alert/set',
+            resetCart: 'cart/resetCartState'
+        }),
         finish() {
+            this.setAlert({
+                status: true,
+                text: 'Pembayaran Berhasil',
+                type: 'success'
+            })
+            this.resetCart()
             this.$router.push('/')
         }
     },
     created() {
         console.log(this.payment)
+        console.log(this.carts.length)
     }
 }
 </script>

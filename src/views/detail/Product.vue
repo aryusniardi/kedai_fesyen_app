@@ -70,12 +70,21 @@ export default {
         }),
         buy() {
             if(!this.guest) {
-                this.addCart(this.product),
-                this.setAlert({
-                    status: true,
-                    text: 'Added to Cart',
-                    type: 'success'
-                })
+                if(this.product.stock > 0) {
+                    this.addCart(this.product),
+                    this.setAlert({
+                        status: true,
+                        text: 'Added to Cart',
+                        type: 'success'
+                    })
+                } else {
+                    this.setAlert({
+                        status: true,
+                        text: 'Stock habis',
+                        type: 'warning'
+                    })
+                    this.$router.push({name: 'home'})
+                }
             } else {
                 this.setAlert({
                     status: true,

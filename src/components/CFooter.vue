@@ -8,7 +8,7 @@
       tile
       class="white text-center"
     >
-      <v-card-text>
+      <v-card-text v-if="isHome">
         <v-btn
           v-for="link in links"
           :to="link"
@@ -22,7 +22,7 @@
         </v-btn>
       </v-card-text>
 
-      <v-card-text class="white--text pt-0">
+      <v-card-text class="white--text mt-3">
         Project UAS Technology WEB 2.0 
         <br>
         <strong>Ahmad Sopandi</strong> & <strong>Arief Rahman Y</strong>
@@ -51,5 +51,10 @@
         'about',
       ],
     }),
+    computed: {
+      isHome() {
+        return (this.$route.path === '/')
+      }
+    }
   }
 </script>

@@ -2,7 +2,7 @@
   <div class="home">
 
     <!-- List Categories -->
-    <v-container>
+    <v-container class="mt-4">
       <v-subheader>
         <strong>
           Top Category
