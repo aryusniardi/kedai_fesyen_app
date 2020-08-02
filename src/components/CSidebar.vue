@@ -17,7 +17,7 @@
       <v-list-item two-line>
         <v-list-item-avatar>
           <img v-if="user.avatar == null" src="https://randomuser.me/api/portraits/men/81.jpg">
-          <img v-else :src="getImage('/users/' + user.avatar)">
+          <img v-else :src="getImage('/avatar/' + user.avatar)">
         </v-list-item-avatar>
 
         <v-list-item-content>

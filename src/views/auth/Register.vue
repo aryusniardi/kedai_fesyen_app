@@ -64,6 +64,9 @@
                         hint="at least 6 character" 
                         @click:append="showPassword = !showPassword"
                     ></v-text-field>
+                        <label>File
+                            <input type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFileUpload()"/>
+                        </label>
                 </v-form>
                 </v-card-text>
                 <v-card-actions>
@@ -98,6 +101,8 @@ export default {
                 value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
             ],
 
+            gambar: '',
+
             showPassword: false,
             password: '',
             passwordRules: [
@@ -126,7 +131,7 @@ export default {
                 let formData = new FormData()
                 formData.set('name', this.name)
                 formData.set('email', this.email)
-                formData.append('avatar', this.avatar)
+                formData.append('avatar', this.gambar)
                 formData.set('password' , this.password)
 
                 this.axios.post('/register', formData)
@@ -164,6 +169,9 @@ export default {
                 reader.readAsDataURL(input.files[0]);
             }
             console.log(this.avatar)
+        },
+        onChangeFileUpload(){
+            this.gambar = this.$refs.file.files[0];
         }
     }
 }
