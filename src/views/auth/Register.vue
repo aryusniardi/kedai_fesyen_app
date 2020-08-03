@@ -23,7 +23,12 @@
                     </template>
                 </v-row>
                 <v-form ref="form" v-model="valid" lazy-validation>
-                    <input required class="v_input input" type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFileUpload()"/>
+                    <label class="file">
+                        Choose Avatar
+                        <br/>
+                        <input required class="v_input input mt-3" type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFileUpload()"/>
+                    </label>
+                    
 
                     <v-text-field
                         name="Full Name"

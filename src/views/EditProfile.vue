@@ -10,6 +10,11 @@
                         <img :src="url_img">
                     </v-avatar>
                 </template>
+                <template v-else>
+                    <v-avatar height="100" width="100">
+                        <img v-if="user.avatar" :src="getImage('/avatar/' + user.avatar)">
+                    </v-avatar>
+                </template>
             </v-row>
             <v-card>
                 <v-toolbar
@@ -18,8 +23,7 @@
                     <v-spacer></v-spacer>
                     <v-btn
                         @click="close"
-                        icon
-                        v-on="on">
+                        icon>
                         <v-icon>close</v-icon>
                     </v-btn>
                 </v-toolbar>
@@ -61,7 +65,11 @@
                             append-icon="phone">
                         </v-text-field>
 
-                        <input required class="v_input input" type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFileUpload()"/>
+                        <label class="file">
+                            Choose Avatar
+                            <br/>
+                            <input required class="mt-3 btn" type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFileUpload()"/>
+                        </label>
 
                         <v-select 
                             v-model="province_id" 
@@ -161,23 +169,6 @@ import { mapGetters, mapActions } from 'vuex'
                     },
                 }
 
-                let dataForm = new FormData()
-                dataForm.append('avatar', this.gambar)
-
-                this.axios.post('/edit-image', dataForm, config)
-                .then(() => {
-                    console.log('updated image')
-                })
-                .catch((error) => {
-                    console.log(error)
-                    let responses = error.response
-                    this.setAlert({
-                        status: true,
-                        text: responses.data.message,
-                        type: 'error'
-                    })
-                })
-
                 this.axios.post('/update-profile', formData, config)
                 .then((response) => {
                     this.setAuth(response.data.data)
@@ -200,6 +191,38 @@ import { mapGetters, mapActions } from 'vuex'
         onChangeFileUpload(){
             this.gambar = this.$refs.file.files[0];
             this.url_img = URL.createObjectURL(this.gambar);
+
+            let config = {
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'Bearer ' + this.user.api_token
+                },
+            }
+
+            let formData = new FormData()
+            formData.append('avatar', this.gambar)
+
+            this.axios.post('/edit-image', formData, config)
+            .then((response) => {
+                let data = response.data.data
+                this.setAlert({
+                    status: true, 
+                    text: 'Update Successfull',
+                    type: 'success'
+                })
+                console.log(data)
+                console.log(data.name)
+                this.$router.push({name: 'home'})
+            })
+            .catch((error) => {
+                console.log(error)
+                let responses = error.response
+                this.setAlert({
+                    status: true,
+                    text: responses.data.message,
+                    type: 'error'
+                })
+            })
         }
     },
     created() {
