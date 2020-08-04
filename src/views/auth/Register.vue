@@ -10,7 +10,7 @@
                 <v-toolbar
                     color="white"
                     light
-                    flat
+                flat
                 >
                 <v-toolbar-title><strong>Register form</strong></v-toolbar-title>
                 </v-toolbar>

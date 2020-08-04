@@ -114,7 +114,7 @@ export default {
                     console.log(responses.data.message)
                     this.setAlert({
                         status: true,
-                        text: responses.data.message,
+                        text: responses.data.error,
                         type: 'error'
                     })
                 })

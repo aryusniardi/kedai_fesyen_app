@@ -4,19 +4,7 @@
       <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
           <v-col cols="12" sm="8" md="6">
-            <v-row justify="space-around" class="py-5">
-                <template v-if="url_img">
-                    <v-avatar height="100" width="100">
-                        <img :src="url_img">
-                    </v-avatar>
-                </template>
-                <template v-else>
-                    <v-avatar height="100" width="100">
-                        <img v-if="user.avatar" :src="getImage('/avatar/' + user.avatar)">
-                    </v-avatar>
-                </template>
-            </v-row>
-            <v-card>
+            <v-card flat>
                 <v-toolbar
                     color="white" light flat>
                     <v-toolbar-title><strong>Edit Profile</strong></v-toolbar-title>
@@ -27,6 +15,20 @@
                         <v-icon>close</v-icon>
                     </v-btn>
                 </v-toolbar>
+
+                <v-row justify="space-around" class="py-5">
+                    <template v-if="url_img">
+                        <v-avatar height="100" width="100">
+                            <img :src="url_img">
+                        </v-avatar>
+                    </template>
+                    <template v-else>
+                        <v-avatar height="100" width="100">
+                            <img v-if="user.avatar" :src="getImage('/avatar/' + user.avatar)">
+                        </v-avatar>
+                    </template>
+                </v-row>
+                
                 <v-card-text>
                     <v-form ref="form" lazy-validation>                        
                         <v-text-field 
@@ -42,6 +44,29 @@
                             :rules="emailRules" 
                             append-icon="email">
                         </v-text-field>
+                        <v-text-field
+                            id="password"
+                            label="Password"
+                            name="password"
+                            prepend-icon="mdi-lock"
+                            v-model="password" 
+                            :rules="passwordRules" 
+                            :append-icon="showPassword ? 'visibility' : 'visibility_off'" 
+                            :type="showPassword ? 'text' : 'password'" 
+                            hint="At least 6 characters" 
+                            @click:append="showPassword = !showPassword"
+                        ></v-text-field>
+                        <v-text-field
+                            id="password_confirmation"
+                            label="Confirm Password"
+                            name="password_confirmation"
+                            v-model="password_confirmation"
+                            :rules="passwordRules" 
+                            :append-icon="showPasswordConfirmation ? 'visibility' : 'visibility_off'" 
+                            :type="showPasswordConfirmation ? 'text' : 'password'" 
+                            hint="At least 6 characters" 
+                            @click:append="showPasswordConfirmation = !showPasswordConfirmation"
+                        ></v-text-field>
                         <v-textarea 
                             label="Adress" 
                             v-model="address" 
@@ -59,7 +84,7 @@
                         <label class="file">
                             Choose Avatar
                             <br/>
-                            <input required class="mt-3 btn" type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFile()"/>
+                            <input required class="mt-3 btn" type="file" id="avatar" name="avatar" ref="file" v-on:change="onChangeFile()"/>
                         </label>
 
                         <v-select 
@@ -70,8 +95,18 @@
                             item-value="id" 
                             persistent-hint 
                             single-line
+                            required
                         ></v-select>
-                        <v-select label="city" v-model="city_id" v-if="province_id > 0" :items="citiesByProvince" item-text="city" item-value="id" persistent-hint single-line></v-select>
+                        <v-select 
+                            label="city" 
+                            v-model="city_id" 
+                            v-if="province_id > 0" 
+                            :items="citiesByProvince" 
+                            item-text="city" 
+                            item-value="id" 
+                            persistent-hint 
+                            single-line
+                            required></v-select>
                     </v-form>
                 </v-card-text>
               <v-card-actions>
@@ -97,17 +132,25 @@ import { mapGetters, mapActions } from 'vuex'
             email: '',
             name: '',
             address: '',
+            password: '',
+            password_confirmation: '',
             url_img: null,
             phone: '',
-            gambar: '',
+            avatar: '',
             province_id: 0,
             city_id: 0,
             dialogConfirm: false,
             valid: true,
+            showPassword: false,
+            showPasswordConfirmation: false,
             emailRules: [
                 v => !!v || 'E-mail is required',
                 v => /([a-zA-Z0-9_]{1,})(@)([a-zA-Z0-9_]{2,}).([a-zA-Z0-9_]{2,})+/.test(v) || 'E-mail must be valid'
-            ]
+            ],
+            passwordRules: [
+                v => !!v || 'Password required',
+                v => (v && v.length >= 6) || 'Min 6 Characters'
+            ],
         }
     },
     computed: {
@@ -137,14 +180,19 @@ import { mapGetters, mapActions } from 'vuex'
         },
         submit() {
             if (this.$refs.form.validate()) {
-                let formData = {
-                    'email': this.email,
-                    'name': this.name,
-                    'address': this.address,
-                    'phone': this.phone,
-                    'province_id': this.province_id,
-                    'city_id': this.city_id
-                }
+                this.avatar = this.$refs.file.files[0];
+                this.url_img = URL.createObjectURL(this.avatar);
+
+                let formData = new FormData()
+                formData.set('name', this.name)
+                formData.set('email', this.email)
+                formData.set('avatar', this.avatar)
+                formData.set('password' , this.password)
+                formData.set('password_confirmation', this.password_confirmation)
+                formData.set('address', this.address)
+                formData.set('phone', this.phone)
+                formData.set('province_id', this.province_id)
+                formData.set('city_id', this.city_id)
                 
                 let config = {
                     headers: {
@@ -158,10 +206,11 @@ import { mapGetters, mapActions } from 'vuex'
                     this.setAuth(response.data.data)
                     this.setAlert({
                         status: true,
-                        text: response.data.message,
+                        text: 'Please Re-login',
                         type: 'success'
                     })
                     .catch((error) => {
+                        console.log(formData)
                         let responses = error.response
                         this.setAlert({
                             status: true,
@@ -170,46 +219,42 @@ import { mapGetters, mapActions } from 'vuex'
                         })
                     })
                 })
-                this.onChangeFileUpload()
+                this.logout()
+                this.$router.push({name: 'login'})
+                
+                // this.onChangeFileUpload()
             }
         },
-        onChangeFile(){
-            this.gambar = this.$refs.file.files[0];
-            this.url_img = URL.createObjectURL(this.gambar);    
-        },
-        onChangeFileUpload(){
+        logout() {
             let config = {
                 headers: {
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer ' + this.user.api_token
-                },
+                    'Authorization' : 'Bearer ' + this.user.api_token,
+                }
             }
 
-            let formData = new FormData()
-            formData.append('avatar', this.gambar)
-
-            this.axios.post('/edit-image', formData, config)
-            .then((response) => {
-                let data = response.data.data
-                this.setAlert({
-                    status: true, 
-                    text: 'Update Successfull',
-                    type: 'success'
-                })
-                console.log(data)
-                console.log(data.name)
-                //this.$router.push({name: 'home'})
-            })
-            .catch((error) => {
-                console.log(error)
-                let responses = error.response
+            this.axios.post('/logout', {}, config) 
+            .then(() => {
+            this.setAuth({})
                 this.setAlert({
                     status: true,
-                    text: responses.data.message,
+                    text: 'Logout Successfully',
+                    type: 'success'
+                })
+                this.setSideBar(false)
+            })
+            .catch((error) => {
+                let responses = error.message
+                this.setAlert({
+                    status: true,
+                    text: responses.data.error,
                     type: 'error'
                 })
             })
-        }
+        },
+        onChangeFile(){
+            this.avatar = this.$refs.file.files[0];
+            this.url_img = URL.createObjectURL(this.avatar);    
+        },
     },
     created() {
         this.name = this.user.name

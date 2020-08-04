@@ -114,7 +114,7 @@ import { mapGetters, mapActions } from 'vuex'
           let responses = error.message
           this.setAlert({
             status: true,
-            text: responses.data.message,
+            text: responses.data.error,
             type: 'error'
           })
         })
