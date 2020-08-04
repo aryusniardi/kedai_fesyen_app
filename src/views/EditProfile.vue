@@ -42,15 +42,6 @@
                             :rules="emailRules" 
                             append-icon="email">
                         </v-text-field>
-                        <v-text-field 
-                            v-model="password" 
-                            :append-icon="showPassword ? 'visibility' : 'visibility_off'" 
-                            :rules="passwordRules" 
-                            :type="showPassword ? 'text' : 'password'" 
-                            label="Password Baru" 
-                            required
-                            @click:append="showPassword = !showPassword">
-                        </v-text-field>
                         <v-textarea 
                             label="Adress" 
                             v-model="address" 
@@ -68,7 +59,7 @@
                         <label class="file">
                             Choose Avatar
                             <br/>
-                            <input required class="mt-3 btn" type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFileUpload()"/>
+                            <input required class="mt-3 btn" type="file" id="gambar" name="avatar" ref="file" v-on:change="onChangeFile()"/>
                         </label>
 
                         <v-select 
@@ -104,7 +95,6 @@ import { mapGetters, mapActions } from 'vuex'
     data() {
         return {
             email: '',
-            password: '',
             name: '',
             address: '',
             url_img: null,
@@ -117,12 +107,7 @@ import { mapGetters, mapActions } from 'vuex'
             emailRules: [
                 v => !!v || 'E-mail is required',
                 v => /([a-zA-Z0-9_]{1,})(@)([a-zA-Z0-9_]{2,}).([a-zA-Z0-9_]{2,})+/.test(v) || 'E-mail must be valid'
-            ],
-            showPassword: false,
-            passwordRules: [
-                v => !!v || 'Password required',
-                v => (v && v.length >= 6) || 'Min 6 Characters'
-            ],
+            ]
         }
     },
     computed: {
@@ -155,7 +140,6 @@ import { mapGetters, mapActions } from 'vuex'
                 let formData = {
                     'email': this.email,
                     'name': this.name,
-                    'password': this.password,
                     'address': this.address,
                     'phone': this.phone,
                     'province_id': this.province_id,
@@ -186,12 +170,14 @@ import { mapGetters, mapActions } from 'vuex'
                         })
                     })
                 })
+                this.onChangeFileUpload()
             }
         },
-        onChangeFileUpload(){
+        onChangeFile(){
             this.gambar = this.$refs.file.files[0];
-            this.url_img = URL.createObjectURL(this.gambar);
-
+            this.url_img = URL.createObjectURL(this.gambar);    
+        },
+        onChangeFileUpload(){
             let config = {
                 headers: {
                     'Accept': 'application/json',
@@ -212,7 +198,7 @@ import { mapGetters, mapActions } from 'vuex'
                 })
                 console.log(data)
                 console.log(data.name)
-                this.$router.push({name: 'home'})
+                //this.$router.push({name: 'home'})
             })
             .catch((error) => {
                 console.log(error)
@@ -228,7 +214,6 @@ import { mapGetters, mapActions } from 'vuex'
     created() {
         this.name = this.user.name
         this.email = this.user.email
-        this.password = this.user.password
         this.address = this.user.address
         this.phone = this.user.phone
         this.city_id = this.user.city_id
