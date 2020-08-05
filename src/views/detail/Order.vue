@@ -1,8 +1,8 @@
 <template>
     <div>
         <v-container>
-            <v-row>
-                <v-col md="6" sm="12" xs="12">
+            <v-row v-for="(product, index) in product" :key="index">
+                <v-col md="6" sm="12" xs="12" >
                     <v-card>
                         <v-img 
                             v-if="product.image" 
@@ -21,12 +21,44 @@
                                 <tr>
                                     <td colspan="3"><b>{{product.title}} </b></td>
                                 </tr>
-                                <tr v-for="(value, key) in orders" :key="key">
-                                    <td v-if="value != orders.fashion_order"><strong>{{key}}</strong></td>
-                                    <td v-if="value != orders.fashion_order">
-                                        <strong v-if="value === orders.total_price" class="price-tag">Rp. {{orders.total_price.toLocaleString('id-ID')}}</strong>
-                                        <strong v-else>{{value}}</strong>
+                                <tr>
+                                    <td><strong>Store </strong></td>
+                                    <td style="text-align: justify">
+                                        <p class="mb-0 color-primary capitalize"><v-icon class="color-primary">store</v-icon> {{product.store}}</p>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Price</strong></td>
+                                    <td>
+                                        <strong v-if="product.price" class="price-tag">Rp. {{product.price.toLocaleString('id-ID')}}</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Desc</strong></td>
+                                    <td style="text-align: justify">
+                                        <p>{{product.description}}</p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </template>
+                    </v-simple-table>
+                </v-col>
+            </v-row>
+            <v-row class="mt-4">
+                <v-col md="12" sm="12" xs="12">
+                    <!-- <v-subheader class="title">Invoice Number : {{orders.invoice_number}}</v-subheader> -->
+                    <v-simple-table>
+                        <template v-slot:default>
+                            <tbody>
+                                <tr>
+                                    <td><b>Invoice Number</b></td>
+                                    <td><b>Courier Service</b></td>
+                                    <td colspan="3"><b>Total Price</b></td>
+                                </tr>
+                                <tr>
+                                    <td>{{orders.invoice_number}}</td>
+                                    <td>{{orders.courier_service}}</td>
+                                    <td v-if="orders.total_price"><strong class="price-tag">Rp. {{orders.total_price.toLocaleString('id-ID')}}</strong></td>
                                 </tr>
                             </tbody>
                         </template>
@@ -56,7 +88,7 @@ export default {
             setAlert: 'alert/set'
         })
     },
-    mounted() {
+    created() {
         let config = {
             headers: {
                 'Authorization': 'Bearer ' + this.user.api_token,
@@ -68,7 +100,7 @@ export default {
         this.axios.get('/order/detail/' + invoice_number, config)
         .then((response) => {
             this.orders = response.data.data
-            let product = this.orders.fashion_order[0]
+            let product = this.orders.fashion_order
             this.product = product
             console.log(this.product)
             console.log(this.orders)
