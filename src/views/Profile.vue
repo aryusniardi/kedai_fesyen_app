@@ -42,7 +42,7 @@
             </v-simple-table>
             
         </v-card>
-        <v-btn block color="primary" dark @click="editProfile" class="mt-4 capitalize">
+        <v-btn block color="primary" dark :to="'/profile/' + user.id" class="mt-4 capitalize">
             <v-icon class="mx-2">create</v-icon> &nbsp;
                 Edit Profile
         </v-btn>
@@ -63,10 +63,6 @@ export default {
             setComponent: 'dialog/setComponent',
             setAuth: 'auth/set',
         }),
-        editProfile() {
-            this.setStatusDialog(true)
-            this.setComponent('EditProfile')
-        },
     },
     created() {
         console.log(this.user)

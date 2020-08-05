@@ -42,6 +42,13 @@ const router = new Router ({
         auth: true
       }
     }, {
+      path: '/profile/:id',
+        name: 'editprofile',
+        component: () => import('../views/EditProfile.vue'),
+        meta: {
+          auth: true
+        }
+    }, {
       path: '/categories',
       name: 'categories',
       component: () => import('../views/Categories.vue')

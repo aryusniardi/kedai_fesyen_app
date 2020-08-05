@@ -99,7 +99,7 @@ import { mapGetters, mapActions } from 'vuex'
             'Authorization' : 'Bearer ' + this.user.api_token,
           }
         }
-
+        this.setSideBar(false)
         this.axios.post('/logout', {}, config) 
         .then(() => {
           this.setAuth({})
@@ -108,7 +108,6 @@ import { mapGetters, mapActions } from 'vuex'
             text: 'Logout Successfully',
             type: 'success'
           })
-          this.setSideBar(false)
         })
         .catch((error) => {
           let responses = error.message

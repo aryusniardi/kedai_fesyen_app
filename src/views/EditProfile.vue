@@ -8,12 +8,6 @@
                 <v-toolbar
                     color="white" light flat>
                     <v-toolbar-title><strong>Edit Profile</strong></v-toolbar-title>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        @click="close"
-                        icon>
-                        <v-icon>close</v-icon>
-                    </v-btn>
                 </v-toolbar>
 
                 <v-row justify="space-around" class="py-5">
@@ -50,6 +44,7 @@
                             name="password"
                             prepend-icon="mdi-lock"
                             v-model="password" 
+                            required
                             :rules="passwordRules" 
                             :append-icon="showPassword ? 'visibility' : 'visibility_off'" 
                             :type="showPassword ? 'text' : 'password'" 
@@ -61,6 +56,7 @@
                             label="Confirm Password"
                             name="password_confirmation"
                             v-model="password_confirmation"
+                            required
                             :rules="passwordRules" 
                             :append-icon="showPasswordConfirmation ? 'visibility' : 'visibility_off'" 
                             :type="showPasswordConfirmation ? 'text' : 'password'" 
@@ -84,7 +80,14 @@
                         <label class="file">
                             Choose Avatar
                             <br/>
-                            <input required class="mt-3 btn" type="file" id="avatar" name="avatar" ref="file" v-on:change="onChangeFile()"/>
+                            <input 
+                                required 
+                                class="mt-3 btn" 
+                                type="file" 
+                                id="avatar" 
+                                name="avatar" 
+                                ref="file" 
+                                v-on:change="onChangeFile()"/>
                         </label>
 
                         <v-select 
@@ -127,6 +130,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
   export default {
+    name: 'editprofile',
     data() {
         return {
             email: '',
@@ -156,6 +160,7 @@ import { mapGetters, mapActions } from 'vuex'
     computed: {
         ...mapGetters({
             user: 'auth/user',
+            sidebar: 'sidebar',
             provinces: 'region/provinces',
             cities: 'region/cities',
             prevUrl: 'prevUrl'
@@ -169,15 +174,12 @@ import { mapGetters, mapActions } from 'vuex'
     },
     methods: {
         ...mapActions({
-            setStatusDialog: 'dialog/setStatus',
+            setSidebar: 'setSidebar',
             setAlert: 'alert/set',
             setAuth: 'auth/set',
             setProvinces: 'region/setProvinces',
             setCities: 'region/setCities',
         }),
-        close() {
-            this.setStatusDialog(false)
-        },
         submit() {
             if (this.$refs.form.validate()) {
                 this.avatar = this.$refs.file.files[0];
@@ -203,24 +205,18 @@ import { mapGetters, mapActions } from 'vuex'
 
                 this.axios.post('/update-profile', formData, config)
                 .then((response) => {
-                    this.setAuth(response.data.data)
+                    console.log(response)
+                    this.logout()
+                })
+                .catch((error) => {
+                    console.log(formData)
+                    let responses = error.response
                     this.setAlert({
                         status: true,
-                        text: 'Please Re-login',
-                        type: 'success'
-                    })
-                    .catch((error) => {
-                        console.log(formData)
-                        let responses = error.response
-                        this.setAlert({
-                            status: true,
-                            text: responses.data.error,
-                            type: 'error'
-                        })
+                        text: responses.data.message,
+                        type: 'error'
                     })
                 })
-                this.logout()
-                this.$router.push({name: 'login'})
                 
                 // this.onChangeFileUpload()
             }
@@ -234,19 +230,19 @@ import { mapGetters, mapActions } from 'vuex'
 
             this.axios.post('/logout', {}, config) 
             .then(() => {
-            this.setAuth({})
+                this.setAuth({})
                 this.setAlert({
                     status: true,
                     text: 'Logout Successfully',
                     type: 'success'
                 })
-                this.setSideBar(false)
+                this.$router.push({name: 'login'})
             })
             .catch((error) => {
                 let responses = error.message
                 this.setAlert({
                     status: true,
-                    text: responses.data.error,
+                    text: responses.data.message,
                     type: 'error'
                 })
             })
